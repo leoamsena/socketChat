@@ -8,6 +8,8 @@ import java.net.Socket;
 import javax.swing.*;
 import java.awt.*;
 
+import src.Mensagem;
+
 import src.client.ui.*;
 
 public class ChatClient {
@@ -36,7 +38,8 @@ public class ChatClient {
             entrada = new ObjectInputStream(cliente.getInputStream());
             saida = new ObjectOutputStream(cliente.getOutputStream());
             saida.writeObject(nome);
-            String recebido = (String) entrada.readObject();
+            Mensagem msg = (Mensagem) entrada.readObject();
+            String recebido = msg.getMessage();
 
             jframe.getContentPane().removeAll();
             jframe.revalidate();
@@ -52,6 +55,7 @@ public class ChatClient {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(jframe, e.getMessage(), "ERRO!", JOptionPane.ERROR_MESSAGE);
             System.out.println("Erro: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

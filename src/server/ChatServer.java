@@ -11,6 +11,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import src.Mensagem;
+
 public class ChatServer extends Thread {
     // public static int porta = 5000;
     private static ArrayList<ObjectOutputStream> clientes = new ArrayList<>();;
@@ -38,11 +40,11 @@ public class ChatServer extends Thread {
         }
     }
 
-    public void sendToAll(String mensagem) {
+    public void sendToAll(String mensagem, int code) {
         try {
             for (ObjectOutputStream saida : clientes) {
 
-                saida.writeObject(nome + ": " + mensagem);
+                saida.writeObject(new Mensagem(nome + ": " + mensagem, code));
                 saida.flush();
 
             }
@@ -58,21 +60,21 @@ public class ChatServer extends Thread {
             saida = new ObjectOutputStream(this.conexao.getOutputStream());
             clientes.add(saida);
             this.entrada = new ObjectInputStream(this.conexao.getInputStream());
-            // saida.writeObject("QUAL SEU NOME?????");
+
             while (this.nome == null) {
                 this.nome = (String) this.entrada.readObject();
             }
-
-            saida.writeObject("Seja bem vindo " + nome + "!!!");
-            sendToAll("entrou no chat!");
+            Mensagem msg = new Mensagem("Seja bem vindo " + nome + "!!!");
+            saida.writeObject(msg);
+            sendToAll("entrou no chat!", 1);
             while (true) {
                 mensagem = (String) entrada.readObject();
                 try {
                     if (mensagem.equalsIgnoreCase("/atencao")) {
-                        sendToAll("CHAMOU ATENÇÃO!");
+                        sendToAll("CHAMOU ATENÇÃO!", 2);
                     } else {
 
-                        sendToAll(mensagem);
+                        sendToAll(mensagem, 1);
                         System.out.println("Enviando para todos: " + mensagem);
 
                     }
@@ -87,7 +89,7 @@ public class ChatServer extends Thread {
 
         EOFException e) {
             clientes.remove(saida);
-            sendToAll("saiu do chat...");
+            sendToAll("saiu do chat...", 1);
         } catch (Exception e) {
             e.printStackTrace();
 
