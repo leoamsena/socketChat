@@ -17,10 +17,7 @@ public class ClientThread extends Thread {
         try {
             String recebido;
             while (true) {
-                System.out.println("LAÇO");
                 recebido = (String) entrada.readObject();
-                System.out.println("RODANDO!");
-                System.out.println("ADICIONANDO!!!");
                 c.adicionarChat(recebido);
             }
         } catch (IOException e) {

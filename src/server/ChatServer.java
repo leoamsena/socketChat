@@ -1,6 +1,7 @@
 package src.server;
 
 import java.io.BufferedReader;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,6 +18,7 @@ public class ChatServer extends Thread {
     private String nome;
     private Socket conexao;
     private ObjectInputStream entrada;
+    private ObjectOutputStream saida;
 
     public static ServerSocket getServer() throws IOException {
         if (server == null) {
@@ -51,13 +53,16 @@ public class ChatServer extends Thread {
         }
     }
 
-    public void sendToAll(ObjectOutputStream clienteEnviouSaida, String mensagem) throws IOException {
+    public void sendToAll(String mensagem) {
+        try {
+            for (ObjectOutputStream saida : clientes) {
 
-        for (ObjectOutputStream saida : clientes) {
+                saida.writeObject(nome + ": " + mensagem);
+                saida.flush();
 
-            saida.writeObject(nome + ": " + mensagem);
-            saida.flush();
-
+            }
+        } catch (Exception e) {
+            System.out.println("ERRO AO ENVIAR MENSAGEM!" + e);
         }
 
     }
@@ -65,7 +70,7 @@ public class ChatServer extends Thread {
     public void run() {
         try {
             String mensagem;
-            ObjectOutputStream saida = new ObjectOutputStream(this.conexao.getOutputStream());
+            saida = new ObjectOutputStream(this.conexao.getOutputStream());
             clientes.add(saida);
             this.entrada = new ObjectInputStream(this.conexao.getInputStream());
             // saida.writeObject("QUAL SEU NOME?????");
@@ -74,13 +79,14 @@ public class ChatServer extends Thread {
             }
 
             saida.writeObject("Seja bem vindo " + nome + "!!!");
+            sendToAll("entrou no chat!");
             while (true) {
                 mensagem = (String) entrada.readObject();
                 if (mensagem.equalsIgnoreCase("/sair")) {
                     break;
                 } else {
                     try {
-                        sendToAll(saida, mensagem);
+                        sendToAll(mensagem);
                         System.out.println("Enviando para todos: " + mensagem);
                     } catch (Exception e) {
                         System.out.println("ERRO!");
@@ -90,6 +96,9 @@ public class ChatServer extends Thread {
                 }
             }
 
+        } catch (EOFException e) {
+            clientes.remove(saida);
+            sendToAll("saiu do chat...");
         } catch (Exception e) {
             e.printStackTrace();
 
