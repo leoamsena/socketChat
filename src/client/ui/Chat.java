@@ -12,17 +12,22 @@ public class Chat extends JPanel {
     public Chat() {
         this.setLayout(new BorderLayout());
         jTxtArea = new JTextArea();
-        jTxtArea.setText("testando\ntestando2\ntestando3");
+
         jTxtArea.setEditable(false);
         JScrollPane chatBox = new JScrollPane(jTxtArea);
-        this.add(BorderLayout.NORTH, chatBox);
+        this.add(BorderLayout.CENTER, chatBox);
+
+        JPanel jp = new JPanel();
 
         caixaDigitacao = new JTextField();
-        this.add(BorderLayout.CENTER, caixaDigitacao);
+        caixaDigitacao.setColumns(60);
+        caixaDigitacao.setText("ESCREVA AQUI");
+        jp.add(caixaDigitacao);
 
         JButton jbEnviar = new JButton("Enviar");
         jbEnviar.addActionListener(e -> ChatClient.enviar(caixaDigitacao.getText()));
-        this.add(BorderLayout.EAST, jbEnviar);
+        jp.add(jbEnviar);
+        this.add(BorderLayout.SOUTH, jp);
 
     }
 
