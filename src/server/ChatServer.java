@@ -28,21 +28,6 @@ public class ChatServer extends Thread {
         return server;
     }
 
-    public void waitConection() throws IOException, ClassNotFoundException {
-        System.out.println("Aguardando conexão na porta " + this.server.getLocalPort());
-        Socket cliente = this.server.accept();
-        System.out.println("Cliente conectado: " + cliente.getInetAddress().getHostAddress());
-        ObjectOutputStream saida = new ObjectOutputStream(cliente.getOutputStream());
-        ObjectInputStream entrada = new ObjectInputStream(cliente.getInputStream());
-        saida.flush();
-        saida.writeObject("Qual é seu nome?");
-        String nome;
-        while ((nome = (String) entrada.readObject()) != "") {
-            System.out.println("Cliente disse que o nome dele é: " + nome);
-        }
-        saida.writeObject("Seja bem-vindo " + nome + "!");
-    }
-
     public ChatServer(Socket conexao) throws IOException {
         this.conexao = conexao;
 
@@ -82,21 +67,25 @@ public class ChatServer extends Thread {
             sendToAll("entrou no chat!");
             while (true) {
                 mensagem = (String) entrada.readObject();
-                if (mensagem.equalsIgnoreCase("/sair")) {
-                    break;
-                } else {
-                    try {
+                try {
+                    if (mensagem.equalsIgnoreCase("/atencao")) {
+                        sendToAll("CHAMOU ATENÇÃO!");
+                    } else {
+
                         sendToAll(mensagem);
                         System.out.println("Enviando para todos: " + mensagem);
-                    } catch (Exception e) {
-                        System.out.println("ERRO!");
-                        e.printStackTrace();
 
                     }
+                } catch (Exception e) {
+                    System.out.println("ERRO!");
+                    e.printStackTrace();
+
                 }
             }
 
-        } catch (EOFException e) {
+        } catch (
+
+        EOFException e) {
             clientes.remove(saida);
             sendToAll("saiu do chat...");
         } catch (Exception e) {
