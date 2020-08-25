@@ -1,7 +1,9 @@
-package ui;
+package src.client.ui;
 
 import javax.swing.*;
 import java.awt.*;
+
+import src.client.*;
 
 public class Login extends JPanel {
     private JTextField host;
@@ -42,6 +44,7 @@ public class Login extends JPanel {
 
         JButton jb = new JButton("Entrar!");
         jb.setFont(new Font("Serif", Font.PLAIN, 50));
+        jb.addActionListener(e -> ChatClient.logar(this.host.getText(), this.porta.getText(), this.nome.getText()));
         this.add(BorderLayout.SOUTH, jb);
 
     }

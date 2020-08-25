@@ -1,3 +1,5 @@
+package src.server;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,11 +54,12 @@ public class ChatServer extends Thread {
     public void sendToAll(ObjectOutputStream clienteEnviouSaida, String mensagem) throws IOException {
 
         for (ObjectOutputStream saida : clientes) {
-            if (clienteEnviouSaida != saida) {
-                saida.writeObject(nome + ": " + mensagem);
-                saida.flush();
-            }
+
+            saida.writeObject(nome + ": " + mensagem);
+            saida.flush();
+
         }
+
     }
 
     public void run() {
@@ -65,18 +68,25 @@ public class ChatServer extends Thread {
             ObjectOutputStream saida = new ObjectOutputStream(this.conexao.getOutputStream());
             clientes.add(saida);
             this.entrada = new ObjectInputStream(this.conexao.getInputStream());
-            saida.writeObject("QUAL SEU NOME?????");
+            // saida.writeObject("QUAL SEU NOME?????");
             while (this.nome == null) {
                 this.nome = (String) this.entrada.readObject();
             }
 
             saida.writeObject("Seja bem vindo " + nome + "!!!");
-            while ((mensagem = (String) entrada.readObject()) != null) {
+            while (true) {
+                mensagem = (String) entrada.readObject();
                 if (mensagem.equalsIgnoreCase("/sair")) {
                     break;
                 } else {
-                    sendToAll(saida, mensagem);
-                    System.out.println("Enviando para todos: " + mensagem);
+                    try {
+                        sendToAll(saida, mensagem);
+                        System.out.println("Enviando para todos: " + mensagem);
+                    } catch (Exception e) {
+                        System.out.println("ERRO!");
+                        e.printStackTrace();
+
+                    }
                 }
             }
 
