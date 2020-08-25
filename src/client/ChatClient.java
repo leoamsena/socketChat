@@ -1,6 +1,5 @@
 package src.client;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -20,7 +19,7 @@ public class ChatClient {
 
     public static void main(String[] args) {
         jframe = new JFrame("Chat!");
-        jframe.setResizable(true);
+        jframe.setResizable(false);
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jframe.setLocationRelativeTo(null);
 
@@ -66,22 +65,4 @@ public class ChatClient {
             JOptionPane.showMessageDialog(jframe, e.getMessage(), "ERRO!", JOptionPane.ERROR_MESSAGE);
         }
     }
-    /*
-     * // ANTIGO MAIN
-     * 
-     * public static void main(String[] args) {
-     * 
-     * try {
-     * 
-     * Socket cliente = new Socket("127.0.0.1", 5000); ObjectInputStream entrada =
-     * new ObjectInputStream(cliente.getInputStream()); ObjectOutputStream saida =
-     * new ObjectOutputStream(cliente.getOutputStream()); String recebido = (String)
-     * entrada.readObject(); System.out.println(recebido); String nome = "leo2";
-     * saida.writeObject(nome); while (true) { recebido = (String)
-     * entrada.readObject(); System.out.println(recebido); Scanner scn = new
-     * Scanner(System.in); String input = scn.nextLine(); saida.writeObject(input);
-     * }
-     * 
-     * } catch (Exception e) { System.out.println("Erro: " + e.getMessage()); } }
-     */
 }

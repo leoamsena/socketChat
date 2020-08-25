@@ -22,9 +22,14 @@ public class ClientThread extends Thread {
                 Mensagem msg = (Mensagem) entrada.readObject();
                 code = msg.getCode();
                 recebido = msg.getMessage();
-                c.adicionarChat(recebido);
+
                 if (code == 2) {
+                    c.adicionarChat(msg);
                     c.chamarAtencao();
+                } else if (code == 3) {
+                    c.gerarAlerta(msg);
+                } else {
+                    c.adicionarChat(msg);
                 }
             }
         } catch (IOException e) {

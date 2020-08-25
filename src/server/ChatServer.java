@@ -1,10 +1,7 @@
 package src.server;
 
-import java.io.BufferedReader;
 import java.io.EOFException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
@@ -40,11 +37,11 @@ public class ChatServer extends Thread {
         }
     }
 
-    public void sendToAll(String mensagem, int code) {
+    public void sendToAll(Mensagem msg) {
         try {
             for (ObjectOutputStream saida : clientes) {
 
-                saida.writeObject(new Mensagem(nome + ": " + mensagem, code));
+                saida.writeObject(msg);
                 saida.flush();
 
             }
@@ -64,17 +61,21 @@ public class ChatServer extends Thread {
             while (this.nome == null) {
                 this.nome = (String) this.entrada.readObject();
             }
-            Mensagem msg = new Mensagem("Seja bem vindo " + nome + "!!!");
+            Mensagem msg = new Mensagem("Seja bem vindo " + nome + "!!!", "Servidor");
             saida.writeObject(msg);
-            sendToAll("entrou no chat!", 1);
+            sendToAll(new Mensagem(this.nome + " entrou no chat!", "Servidor", 4));
             while (true) {
                 mensagem = (String) entrada.readObject();
                 try {
                     if (mensagem.equalsIgnoreCase("/atencao")) {
-                        sendToAll("CHAMOU ATENÇÃO!", 2);
+                        sendToAll(new Mensagem("chamou atenção", this.nome, 2));
+                    } else if (mensagem.split(" ")[0].equalsIgnoreCase("/alerta")) {
+                        int pos = mensagem.indexOf(" ");
+                        String aux = mensagem.substring(pos + 1);
+                        sendToAll(new Mensagem(aux, this.nome, 3));
                     } else {
 
-                        sendToAll(mensagem, 1);
+                        sendToAll(new Mensagem(mensagem, this.nome, 1));
                         System.out.println("Enviando para todos: " + mensagem);
 
                     }
@@ -89,7 +90,7 @@ public class ChatServer extends Thread {
 
         EOFException e) {
             clientes.remove(saida);
-            sendToAll("saiu do chat...", 1);
+            sendToAll(new Mensagem("saiu do chat...", "Servidor", 4));
         } catch (Exception e) {
             e.printStackTrace();
 
