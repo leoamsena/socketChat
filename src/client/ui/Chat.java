@@ -89,8 +89,10 @@ public class Chat extends JPanel {
     }
 
     private void enviarMensagem(String mensagem) {
-        this.caixaDigitacao.setText("");
-        ChatClient.enviar(mensagem);
+        if (!mensagem.trim().equals("")) {
+            this.caixaDigitacao.setText("");
+            ChatClient.enviar(mensagem);
+        }
     }
 
     public void adicionarChat(Mensagem msg) {

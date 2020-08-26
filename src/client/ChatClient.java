@@ -5,7 +5,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import javax.swing.*;
-import java.awt.*;
 
 import src.Mensagem;
 
@@ -24,7 +23,6 @@ public class ChatClient {
         jframe.setLocationRelativeTo(null);
 
         jframe.setSize(800, 500);
-        jframe.setLayout(new BorderLayout());
 
         jframe.getContentPane().add(new Login());
 

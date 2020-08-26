@@ -2,6 +2,7 @@ package src.client.ui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 
 import src.client.*;
 
@@ -11,15 +12,39 @@ public class Login extends JPanel {
     private JTextField nome;
 
     public Login() {
-
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JPanel auxPanel = new JPanel();
+
         JLabel jl = new JLabel("NSM!", SwingConstants.CENTER);
         jl.setFont(new Font("Serif", Font.PLAIN, 50));
-        this.add(jl);
 
+        auxPanel.add(jl);
+        this.add(auxPanel);
+
+        try {
+            String sp = System.getProperty("file.separator");
+            String path = "asets" + sp + "img" + sp + "icon.png";
+
+            URL url = ChatClient.class.getResource(path);
+            ImageIcon icon = new ImageIcon(url);
+            Image img = icon.getImage();
+            img = img.getScaledInstance(250, 250, java.awt.Image.SCALE_SMOOTH);
+            icon = new ImageIcon(img);
+
+            JLabel icone = new JLabel();
+            icone.setIcon(icon);
+            auxPanel = new JPanel();
+            auxPanel.add(icone);
+            this.add(auxPanel);
+        } catch (Exception e) {
+            System.err.println("Erro ao adicionar icone! " + e.getMessage());
+        }
+        auxPanel = new JPanel();
         jl = new JLabel("New Service of Messages (NSM) é um chat utilizando sockets!");
-        this.add(jl);
+        auxPanel.add(jl);
+        this.add(auxPanel);
         /*
          * JTextField teste = new JTextField(); teste.setColumns(20); this.add(teste);
          */
@@ -45,10 +70,11 @@ public class Login extends JPanel {
         secondLine.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
         this.add(secondLine);
 
+        auxPanel = new JPanel();
         JButton jb = new JButton("Entrar!");
         jb.setFont(new Font("Serif", Font.PLAIN, 50));
         jb.addActionListener(e -> ChatClient.logar(this.host.getText(), this.porta.getText(), this.nome.getText()));
-        this.add(jb);
-
+        auxPanel.add(jb);
+        this.add(auxPanel);
     }
 }
