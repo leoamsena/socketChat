@@ -2,10 +2,13 @@ package src.client.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.awt.*;
 
 import javax.sound.sampled.AudioInputStream;
@@ -24,17 +27,56 @@ public class Chat extends JPanel {
 
     public Chat() {
         this.setLayout(new BorderLayout());
-        jTxtArea = new JTextPane();
+        JPanel jp;
 
+        jp = new JPanel();
+        jp.setLayout(new GridLayout(1, 4));
+        jp.setBackground(Color.WHITE);
+        try {
+            String sp = System.getProperty("file.separator");
+            String path = "asets" + sp + "img" + sp + "icon.png";
+
+            URL url = ChatClient.class.getResource(path);
+            ImageIcon icon = new ImageIcon(url);
+            Image img = icon.getImage();
+            img = img.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
+            icon = new ImageIcon(img);
+
+            JLabel icone = new JLabel();
+            icone.setIcon(icon);
+            jp.add(icone);
+        } catch (Exception e) {
+            System.err.println("Erro ao adicionar icone! " + e.getMessage());
+
+        }
+        JLabel name = new JLabel("NSM!");
+        jp.add(name);
+        JButton alerta = new JButton("Enviar alerta");
+        jp.add(alerta);
+        alerta.addActionListener(e -> {
+            this.caixaDigitacao.setText("/alerta [TEXTO]");
+        });
+
+        JButton atencao = new JButton("Chamar atenção");
+        atencao.addActionListener(e -> {
+            ChatClient.enviar("/atencao");
+        });
+        jp.add(atencao);
+        this.add(BorderLayout.NORTH, jp);
+
+        jTxtArea = new JTextPane();
+        jTxtArea.setBackground(new Color(247, 247, 247));
         jTxtArea.setEditable(false);
 
         JScrollPane chatBox = new JScrollPane(jTxtArea);
         this.add(BorderLayout.CENTER, chatBox);
 
-        JPanel jp = new JPanel();
+        jp = new JPanel();
+        jp.setBackground(new Color(232, 232, 232));
 
         caixaDigitacao = new JTextField();
-        caixaDigitacao.setColumns(60);
+        caixaDigitacao.setFont(new Font("Serif", Font.PLAIN, 17));
+        caixaDigitacao.setColumns(40);
         caixaDigitacao.setText("ESCREVA AQUI");
         caixaDigitacao.addActionListener(e -> enviarMensagem(caixaDigitacao.getText()));
         jp.add(caixaDigitacao);
@@ -65,16 +107,27 @@ public class Chat extends JPanel {
             cores[2] = Color.RED;
             cores[4] = Color.CYAN;
             cores[5] = Color.GREEN;
-            String nome = (msg.getCode() != 4) ? msg.getNome() + ": " : "";
+            String nome = msg.getNome();
             AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground,
                     cores[msg.getCode()]);
 
             aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Lucida Console");
-            aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_CENTER);
 
             StyledDocument doc = jTxtArea.getStyledDocument();
+            int tam = doc.getLength();
+            String strAux = nome + ": " + novaMensagem + "\n";
+            doc.insertString(tam, strAux, aset);
 
-            doc.insertString(doc.getLength(), nome + novaMensagem + "\n", aset);
+            if (msg.getCode() != 1) { // se mensagem do servidor centraliza
+                SimpleAttributeSet center = new SimpleAttributeSet();
+                StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+                doc.setParagraphAttributes(tam, tam + (strAux.length()), center, false);
+            } else {
+                SimpleAttributeSet left = new SimpleAttributeSet();
+                StyleConstants.setAlignment(left, StyleConstants.ALIGN_LEFT);
+                doc.setParagraphAttributes(tam, tam + (strAux.length()), left, false);
+            }
+
         } catch (BadLocationException e) {
             JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage(), "Erro!", JOptionPane.ERROR_MESSAGE);
         }
@@ -102,12 +155,12 @@ public class Chat extends JPanel {
             clip.open(audioIn);
             clip.start();
         } catch (IOException e) {
-            System.out.println("Erro ao tocar audio! Caminho incorreto!");
+            System.err.println("Erro ao tocar audio! Caminho incorreto!");
         } catch (LineUnavailableException e) {
-            System.out.println("Erro ao tocar audio! LineUnavailable!" + e.getMessage());
+            System.err.println("Erro ao tocar audio! LineUnavailable!" + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Erro ao tocar audio! Desconhecido!" + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Erro ao tocar audio! Desconhecido!" + e.getMessage());
+
         }
     }
 
