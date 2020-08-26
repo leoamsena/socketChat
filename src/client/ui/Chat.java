@@ -2,8 +2,16 @@ package src.client.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.awt.*;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
 import javax.swing.text.*;
 
@@ -44,14 +52,19 @@ public class Chat extends JPanel {
     }
 
     public void adicionarChat(Mensagem msg) {
+        if (msg.getCode() == 5)
+            tocarSom(2);
+        else if (msg.getCode() == 1)
+            tocarSom(1);
         String novaMensagem = msg.getMessage();
 
         try {
             StyleContext sc = StyleContext.getDefaultStyleContext();
-            Color cores[] = new Color[5];
+            Color cores[] = new Color[6];
             cores[1] = Color.BLACK;
             cores[2] = Color.RED;
-            cores[4] = Color.GREEN;
+            cores[4] = Color.CYAN;
+            cores[5] = Color.GREEN;
             String nome = (msg.getCode() != 4) ? msg.getNome() + ": " : "";
             AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground,
                     cores[msg.getCode()]);
@@ -67,13 +80,46 @@ public class Chat extends JPanel {
         }
     }
 
+    // 0 - atencao 1- nova mensagem 2 - online 3 - alerta
+    public void tocarSom(int codigo) {
+        try {
+            String sons[] = new String[4];
+            if (codigo < 0 || codigo >= sons.length)
+                throw new Exception("Música inexistente!");
+
+            sons[0] = "atencao.wav";
+            sons[1] = "mensagem.wav";
+            sons[2] = "online.wav";
+            sons[3] = "alerta.wav";
+            String sp = System.getProperty("file.separator");
+            String path = "asets" + sp + "sounds" + sp;
+            path += sons[codigo];
+            URL url = ChatClient.class.getResource(path);
+
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
+
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioIn);
+            clip.start();
+        } catch (IOException e) {
+            System.out.println("Erro ao tocar audio! Caminho incorreto!");
+        } catch (LineUnavailableException e) {
+            System.out.println("Erro ao tocar audio! LineUnavailable!" + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Erro ao tocar audio! Desconhecido!" + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     public void gerarAlerta(Mensagem msg) {
+        tocarSom(3);
         String mensagem = msg.getMessage();
         String titulo = msg.getNome() + " disse:";
         JOptionPane.showMessageDialog(this, mensagem, titulo, JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void chamarAtencao() {
+        tocarSom(0);
         JFrame jf = (JFrame) SwingUtilities.getWindowAncestor(this);
         Point p = jf.getLocation();
 

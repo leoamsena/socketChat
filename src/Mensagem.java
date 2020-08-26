@@ -21,6 +21,8 @@ public class Mensagem implements Serializable {
      * 
      * 4 - mensagem do servidor
      * 
+     * 5 - novo usuario online
+     * 
      */
 
     public String getMessage() {

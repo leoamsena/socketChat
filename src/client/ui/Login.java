@@ -14,17 +14,15 @@ public class Login extends JPanel {
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setAlignmentX(Component.CENTER_ALIGNMENT);
-        JLabel jl = new JLabel("CHAT!", SwingConstants.CENTER);
+        JLabel jl = new JLabel("NSM!", SwingConstants.CENTER);
         jl.setFont(new Font("Serif", Font.PLAIN, 50));
         this.add(jl);
 
-        jl = new JLabel("Explicando os bagulhos doido do chat!");
+        jl = new JLabel("New Service of Messages (NSM) é um chat utilizando sockets!");
         this.add(jl);
         /*
-        JTextField teste = new JTextField();
-        teste.setColumns(20);
-        this.add(teste);
-        */
+         * JTextField teste = new JTextField(); teste.setColumns(20); this.add(teste);
+         */
         this.host = new JTextField();
         this.host.setColumns(50);
         this.nome = new JTextField();

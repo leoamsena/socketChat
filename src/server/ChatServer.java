@@ -63,7 +63,7 @@ public class ChatServer extends Thread {
             }
             Mensagem msg = new Mensagem("Seja bem vindo " + nome + "!!!", "Servidor");
             saida.writeObject(msg);
-            sendToAll(new Mensagem(this.nome + " entrou no chat!", "Servidor", 4));
+            sendToAll(new Mensagem(this.nome + " entrou no chat!", "Servidor", 5));
             while (true) {
                 mensagem = (String) entrada.readObject();
                 try {

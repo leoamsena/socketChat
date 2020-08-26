@@ -18,7 +18,7 @@ public class ChatClient {
     private static JFrame jframe;
 
     public static void main(String[] args) {
-        jframe = new JFrame("Chat!");
+        jframe = new JFrame("NSM!");
         jframe.setResizable(false);
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jframe.setLocationRelativeTo(null);
