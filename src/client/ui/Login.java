@@ -50,10 +50,13 @@ public class Login extends JPanel {
          */
         this.host = new JTextField();
         this.host.setColumns(50);
+        this.host.setText("Host");
         this.nome = new JTextField();
         this.nome.setColumns(55);
+        this.nome.setText("Seu nome");
         this.porta = new JTextField();
         this.porta.setColumns(4);
+        this.porta.setText("Porta");
 
         JPanel firstLine = new JPanel();
 

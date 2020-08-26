@@ -3,6 +3,7 @@ package src.client;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import javax.swing.*;
 
@@ -49,10 +50,15 @@ public class ChatClient {
             jframe.repaint();
             JOptionPane.showMessageDialog(jframe, recebido, "Mensagem do servidor!", JOptionPane.INFORMATION_MESSAGE);
 
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(jframe, "O campo 'Porta' deve ser um número!", "ERRO!",
+                    JOptionPane.ERROR_MESSAGE);
+        } catch (UnknownHostException e) {
+            JOptionPane.showMessageDialog(jframe, "O Host '" + host + "' não foi encontrado!", "ERRO!",
+                    JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(jframe, e.getMessage(), "ERRO!", JOptionPane.ERROR_MESSAGE);
             System.out.println("Erro: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
