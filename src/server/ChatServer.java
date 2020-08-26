@@ -90,7 +90,7 @@ public class ChatServer extends Thread {
 
         EOFException e) {
             clientes.remove(saida);
-            sendToAll(new Mensagem("saiu do chat...", "Servidor", 4));
+            sendToAll(new Mensagem(this.nome + " saiu do chat...", "Servidor", 4));
         } catch (Exception e) {
             e.printStackTrace();
 

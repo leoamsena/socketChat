@@ -107,8 +107,8 @@ public class Chat extends JPanel {
             Color cores[] = new Color[6];
             cores[1] = Color.BLACK;
             cores[2] = Color.RED;
-            cores[4] = Color.CYAN;
-            cores[5] = Color.GREEN;
+            cores[4] = new Color(46, 171, 0);
+            cores[5] = new Color(46, 171, 0);
             String nome = msg.getNome();
             AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground,
                     cores[msg.getCode()]);
