@@ -23,7 +23,7 @@ public class ChatClient {
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jframe.setLocationRelativeTo(null);
 
-        jframe.setSize(800, 500);
+        jframe.setSize(800, 600);
 
         jframe.getContentPane().add(new Login());
 
