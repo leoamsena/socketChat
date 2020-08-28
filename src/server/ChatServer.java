@@ -12,12 +12,20 @@ import src.Mensagem;
 
 public class ChatServer extends Thread {
     // public static int porta = 5000;
-    private static ArrayList<ObjectOutputStream> clientes = new ArrayList<>();;
+    private static ArrayList<ChatServer> clientes = new ArrayList<>();;
     private static ServerSocket server = null;
     private String nome;
     private Socket conexao;
     private ObjectInputStream entrada;
     private ObjectOutputStream saida;
+
+    private ObjectOutputStream getSaida() {
+        return this.saida;
+    }
+
+    private String getNome() {
+        return this.nome;
+    }
 
     public static ServerSocket getServer() throws IOException {
         if (server == null) {
@@ -39,15 +47,21 @@ public class ChatServer extends Thread {
 
     public void sendToAll(Mensagem msg) {
         try {
-
-            for (ObjectOutputStream saida : clientes) {
+            ArrayList<String> sairam = new ArrayList<>();
+            for (ChatServer cliente : clientes) {
+                ObjectOutputStream saida = cliente.getSaida();
                 try {
                     saida.writeObject(msg);
                     saida.flush();
                 } catch (java.net.SocketException e) {
-                    clientes.remove(saida);
-
+                    clientes.remove(cliente);
+                    cliente.interrupt();
+                    sairam.add(cliente.getNome());
                 }
+            }
+            if (sairam.size() > 0) {
+                for (String saiu : sairam)
+                    this.sendToAll(new Mensagem(saiu + " saiu do chat...", "Servidor", 4));
             }
         } catch (Exception e) {
             System.out.println("ERRO AO ENVIAR MENSAGEM!" + e);
@@ -59,7 +73,7 @@ public class ChatServer extends Thread {
         try {
             String mensagem;
             saida = new ObjectOutputStream(this.conexao.getOutputStream());
-            clientes.add(saida);
+            clientes.add(this);
             this.entrada = new ObjectInputStream(this.conexao.getInputStream());
 
             while (this.nome == null) {
@@ -93,8 +107,9 @@ public class ChatServer extends Thread {
         } catch (
 
         EOFException e) {
-            clientes.remove(saida);
+            clientes.remove(this);
             sendToAll(new Mensagem(this.nome + " saiu do chat...", "Servidor", 4));
+            this.interrupt();
         } catch (Exception e) {
             e.printStackTrace();
 

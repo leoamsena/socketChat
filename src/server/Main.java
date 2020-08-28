@@ -11,6 +11,7 @@ public class Main {
                 System.out.println("Cliente conectado...");
                 Thread t = new ChatServer(con);
                 t.start();
+
             }
         } catch (Exception e) {
             System.out.println(e);
