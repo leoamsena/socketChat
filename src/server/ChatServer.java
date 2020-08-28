@@ -39,11 +39,15 @@ public class ChatServer extends Thread {
 
     public void sendToAll(Mensagem msg) {
         try {
+
             for (ObjectOutputStream saida : clientes) {
+                try {
+                    saida.writeObject(msg);
+                    saida.flush();
+                } catch (java.net.SocketException e) {
+                    clientes.remove(saida);
 
-                saida.writeObject(msg);
-                saida.flush();
-
+                }
             }
         } catch (Exception e) {
             System.out.println("ERRO AO ENVIAR MENSAGEM!" + e);
