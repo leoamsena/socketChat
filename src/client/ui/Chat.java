@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.awt.*;
 
+import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -36,8 +37,8 @@ public class Chat extends JPanel {
             String sp = System.getProperty("file.separator");
             String path = "asets" + sp + "img" + sp + "icon.png";
 
-            URL url = ChatClient.class.getResource(path);
-            ImageIcon icon = new ImageIcon(url);
+            InputStream resource = ChatClient.class.getResourceAsStream(path);
+            ImageIcon icon = new ImageIcon(ImageIO.read(resource));
             Image img = icon.getImage();
             img = img.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
             icon = new ImageIcon(img);
@@ -149,9 +150,9 @@ public class Chat extends JPanel {
             String sp = System.getProperty("file.separator");
             String path = "asets" + sp + "sounds" + sp;
             path += sons[codigo];
-            URL url = ChatClient.class.getResource(path);
+            InputStream resource = ChatClient.class.getResourceAsStream(path);
 
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(resource);
 
             Clip clip = AudioSystem.getClip();
             clip.open(audioIn);

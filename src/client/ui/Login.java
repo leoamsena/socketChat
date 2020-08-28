@@ -1,7 +1,9 @@
 package src.client.ui;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.InputStream;
 import java.net.URL;
 
 import src.client.*;
@@ -27,8 +29,8 @@ public class Login extends JPanel {
             String sp = System.getProperty("file.separator");
             String path = "asets" + sp + "img" + sp + "icon.png";
 
-            URL url = ChatClient.class.getResource(path);
-            ImageIcon icon = new ImageIcon(url);
+            InputStream resource = ChatClient.class.getResourceAsStream(path);
+            ImageIcon icon = new ImageIcon(ImageIO.read(resource));
             Image img = icon.getImage();
             img = img.getScaledInstance(250, 250, java.awt.Image.SCALE_SMOOTH);
             icon = new ImageIcon(img);
