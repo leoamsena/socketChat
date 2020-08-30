@@ -161,7 +161,7 @@ public class Chat extends JPanel {
             // cada mensagem tem uma cor
             cores[1] = Color.BLACK;
             cores[2] = Color.RED;
-            cores[4] = new Color(46, 171, 0);
+            cores[4] = new Color(46, 171, 0); // cores definidas em RGB (RED = 46, GREEN = 171, BLUE = 0)
             cores[5] = new Color(46, 171, 0);
 
             String nome = msg.getNome();
@@ -171,11 +171,16 @@ public class Chat extends JPanel {
                     cores[msg.getCode()]);
 
             aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Lucida Console");
-
+            
+            // pega o texto atual do chat
             StyledDocument doc = jTxtArea.getStyledDocument();
+
+            // pega o tamanho do texto atual do chat
             int tam = doc.getLength();
             // monta a mensagem que será exibida
             String strAux = nome + ": " + novaMensagem + "\n";
+
+            // insere na posição tam o novo texto com as caracteristicas visuais definidas em aset
             doc.insertString(tam, strAux, aset);
 
             // se a mensagem for do servidor

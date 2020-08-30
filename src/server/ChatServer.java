@@ -15,7 +15,6 @@ import src.Mensagem;
     Extende a classe Thread, que controla a execução do método run.
  */
 public class ChatServer extends Thread {
-    // public static int porta = 5000;
     // Lista de clientes conectados no chat
     private static ArrayList<ChatServer> clientes = new ArrayList<>();
     // Socket do servidor.
@@ -39,6 +38,7 @@ public class ChatServer extends Thread {
 
     // Construtor do server sem especificar uma conexão
     public static ServerSocket getServer() throws IOException {
+        // se servidor ainda não foi iniciado
         if (server == null) {
             // atribui um novo socket para o servidor ouvindo na porta 5000
             server = new ServerSocket(5000);
@@ -126,13 +126,13 @@ public class ChatServer extends Thread {
                 // lê a mensagem do usuário
                 mensagem = (String) entrada.readObject();
                 try {
-                    // se a mensagem for do tipo atenção
+                    // se a mensagem for do tipo atenção (/atencao)
                     if (mensagem.equalsIgnoreCase("/atencao")) {
                         // envia o alerta para todos os usuários
                         sendToAll(new Mensagem("chamou atenção", this.nome, 2));
-                        //se a mensagem for do tipo alerta
+                        //se a mensagem for do tipo alerta (/alerta [texto])
                     } else if (mensagem.split(" ")[0].equalsIgnoreCase("/alerta")) {
-                        // obtêm o texto a ser exibido
+                        // obtêm o texto a ser exibido (pega asubstring correspondente ao [TEXTO])
                         int pos = mensagem.indexOf(" ");
                         String aux = mensagem.substring(pos + 1);
                         // envia a todo o alerta

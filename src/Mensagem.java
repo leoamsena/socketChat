@@ -2,7 +2,6 @@ package src;
 
 import java.io.Serializable;
 
-import java.awt.*;
 /*
     Classe que define uma mensagem, extende Serializable para que possa ser transformada em texto para envio na rede.
 */
