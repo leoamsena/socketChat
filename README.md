@@ -17,10 +17,11 @@ javac -d bin @sources.txt
 cp -r src/client/asets/ bin/src/client/
 rm sources.txt
 ```
-Para compilação em Windows (não testada):
+Para compilação em Windows:
 
 ```
 dir /s /B *.java > sources.txt
+mkdir bin
 javac -d bin @sources.txt
 cp -r src/client/asets/ bin/src/client/
 ```
