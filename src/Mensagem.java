@@ -3,7 +3,9 @@ package src;
 import java.io.Serializable;
 
 import java.awt.*;
-
+/*
+    Classe que define uma mensagem, extende Serializable para que possa ser transformada em texto para envio na rede.
+*/
 public class Mensagem implements Serializable {
     private static final long serialVersionUID = 1L;
     private int code;
