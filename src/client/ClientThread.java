@@ -6,7 +6,8 @@ import src.Mensagem;
 import src.client.ui.Chat;
 
 /*
-    Classe responsável por receber comunicação do servidor
+    Classe responsável por receber comunicação do servidor. 
+    Extende a classe Thread, que controla a execução do método run.
  */
 public class ClientThread extends Thread {
     private ObjectInputStream entrada;
@@ -19,7 +20,7 @@ public class ClientThread extends Thread {
         this.c = c;
     }
 
-    // Método executado ????
+    // método que será executado na Thread
     public void run() {
         try {
             // mensagem recebida

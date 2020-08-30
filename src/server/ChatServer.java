@@ -12,6 +12,7 @@ import src.Mensagem;
 
 /*
     Controla o servidor por onde as mensagems passam.
+    Extende a classe Thread, que controla a execução do método run.
  */
 public class ChatServer extends Thread {
     // public static int porta = 5000;
@@ -25,7 +26,7 @@ public class ChatServer extends Thread {
     private Socket conexao;
     // entrada de dados do usuário
     private ObjectInputStream entrada;
-    // entrada de dados do usuário
+    // saida de dados do servidro para o user
     private ObjectOutputStream saida;
 
     private ObjectOutputStream getSaida() {
@@ -98,7 +99,7 @@ public class ChatServer extends Thread {
 
     }
 
-    // Método executado ????
+    // método que será executado na Thread
     public void run() {
         try {
             String mensagem;
